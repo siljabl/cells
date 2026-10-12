@@ -865,8 +865,7 @@ PYBIND11_MODULE(bind, m) {
                 double const& epsilon) {
                 self.integrate(dt, delta, epsilon);
             },
-            "Compute forces and integrate dynamics. T1s are performed at\n"
-            "each time step.\n"
+            "Compute forces and integrate dynamics of a single time step.\n"
             "\n"
             "Parameters\n"
             "----------\n"
@@ -941,6 +940,13 @@ PYBIND11_MODULE(bind, m) {
             "avoidThreeEdgeCells : bool\n"
             "    Ignore divisions which would result in cells with three\n"
             "    edges. (default: False)\n"
+            "avoidThinCells : bool\n"
+            "    Ignore divisions which would result in cells with junctions\n"
+            "    shorter than a fraction of the mean junction length.\n"
+            "    (default: False)\n"
+            "edgeLim : double\n"
+            "    Upper limit on the allowed fraction of the mean junction\n"
+            "    length. (default: 0)"
             "\n"
             "Returns\n"
             "-------\n"
@@ -952,7 +958,7 @@ PYBIND11_MODULE(bind, m) {
             pybind11::arg("edgeLim")=0)
         .def("splitCellAtMiddle",
             &VertexModel::splitCellAtMiddle,
-            "Split cell across the two least separated boundary half-edge\n"
+            "Split cell across two opposite boundary half-edges\n"
             "centres.\n"
             "\n"
             "Parameters\n"
@@ -962,6 +968,13 @@ PYBIND11_MODULE(bind, m) {
             "avoidThreeEdgeCells : bool\n"
             "    Ignore divisions which would result in cells with three\n"
             "    edges. (default: False)\n"
+            "avoidThinCells : bool\n"
+            "    Ignore divisions which would result in cells with junctions\n"
+            "    shorter than a fraction of the mean junction length.\n"
+            "    (default: False)\n"
+            "edgeLim : double\n"
+            "    Upper limit on the allowed fraction of the mean junction\n"
+            "    length. (default: 0)"
             "\n"
             "Returns\n"
             "-------\n"
@@ -1012,8 +1025,8 @@ PYBIND11_MODULE(bind, m) {
             "     removed.",
             pybind11::arg("mergeCellAtMin"))
         .def("mergeCellAtMax",
-            &VertexModel::mergeCellAtMax,
-            "Merge cell with its neighbouring cell of maximum area.\n"
+            &VertexModel::mergeCellAtMaxJunction,
+            "Merge cell with neighbouring cell across its longest boundary junction.\n"
             "\n"
             "Parameters\n"
             "----------\n"
@@ -1139,7 +1152,7 @@ PYBIND11_MODULE(bind, m) {
             "gamma : float\n"
             "    Surface tension.\n"
             "Lambda : float\n"
-            "    Surface tension.\n"
+            "    Anisotropy parameter.\n"
             "V0 : float\n"
             "    Cell volume.\n"
             "tauV : float\n"

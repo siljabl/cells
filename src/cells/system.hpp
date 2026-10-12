@@ -307,10 +307,10 @@ class VertexModel : public Mesh {
             Indices of neighbouring cell centres whose edges have been removed.
         */
         
-        std::tuple<long int, std::vector<long int>> mergeCellAtMax(
+        std::tuple<long int, std::vector<long int>> mergeCellAtMaxJunction(
             long int const& cellVertexIndex);
         /*
-        Merge cell with its neighbouring cell of maximum area.
+        Merge cell with neighbouring cell across its longest boundary junction.
 
         Parameters
         ----------

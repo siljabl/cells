@@ -521,10 +521,10 @@ std::tuple<long int, std::vector<long int>> VertexModel::mergeCellAtMin(
         getHalfEdgeBetweenIndex(cellVertexIndex, minAreaNeighCellVertexIndex));
 }
 
-std::tuple<long int, std::vector<long int>> VertexModel::mergeCellAtMax(
+std::tuple<long int, std::vector<long int>> VertexModel::mergeCellAtMaxJunction(
     long int const& cellVertexIndex) {
 
-    // find cell neighbour with the longest junction
+    // find cell neighbour with the longest shared junction
     std::vector<long int> const centreToJunctionHalfEdgeIndices = getNeighbourVertices(cellVertexIndex)[1];
     assert((int) centreToJunctionHalfEdgeIndices.size() > 0);
     long int maxJunctionNeighCellVertexIndex =
