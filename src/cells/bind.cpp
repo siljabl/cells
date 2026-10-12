@@ -1065,13 +1065,15 @@ PYBIND11_MODULE(bind, m) {
             pybind11::arg("A0"))
         .def("addSurfaceForce",
             &VertexModel::addVertexForce<SurfaceForce,
-                double const&, double const&, double const&>,
+                double const&, double const&, double const&, double const&>,
             "Add cell surface minimising force at constant volume.\n"
             "\n"
             "Parameters\n"
             "----------\n"
             "name : str\n"
             "    Unique name for the force.\n"
+            "gamma : float\n"
+            "    Surface tension.\n"
             "Lambda : float\n"
             "    Surface tension.\n"
             "V0 : float\n"
@@ -1081,6 +1083,7 @@ PYBIND11_MODULE(bind, m) {
 //             "    Cell volume relaxation time towards V0. (default: 0)\n"
             "    NOTE: if tauV == 0 then volume is always V0.",
             pybind11::arg("name"),
+            pybind11::arg("gamma"),
             pybind11::arg("Lambda"),
             pybind11::arg("V0"),
             pybind11::arg("tauV")=0)
