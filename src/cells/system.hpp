@@ -232,7 +232,7 @@ class VertexModel : public Mesh {
             Ignore divisions which would result in cells with junctions
             shorter than a fraction of the mean junction length.
         edgeLim : 
-            Upper limit on the allowed fraction of the mean junction
+            Lower limit on the allowed fraction of the mean junction
             length.
 
         Returns
@@ -258,7 +258,7 @@ class VertexModel : public Mesh {
             Ignore divisions which would result in cells with junctions
             shorter than a fraction of the mean junction length.
         edgeLim : 
-            Upper limit on the allowed fraction of the mean junction
+            Lower limit on the allowed fraction of the mean junction
             length.
 
         Returns
