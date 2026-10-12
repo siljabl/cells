@@ -37,14 +37,14 @@ template<> void VertexModel::addVertexForce<
     // derived force class
     SurfaceForce,
     // argument types
-    double const&, double const&>(
+    double const&, double const&, double const&, double const&>(
     // user-defined arguments
     std::string const& name,
-    double const& Lambda, double const& V0, double const& tauV) {
+    double const& gamma, double const& Lambda, double const& V0, double const& tauV) {
     // set force
     vertexForces.add<SurfaceForce>(
         name,                       // (unique) user-defined name for forces
-        Lambda, V0, tauV,           // user-defined parameters
+        gamma, Lambda, V0, tauV,           // user-defined parameters
         this, &forces, &vertices);  // VertexModel attributes
 }
 

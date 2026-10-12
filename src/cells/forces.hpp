@@ -139,11 +139,11 @@ Cell surface minimising force at constant volume.
     public:
 
         SurfaceForce(
-            double const& Lambda_, double const& V0_, double const& tauV_,
+            double const& gamma_, double const& Lambda_, double const& V0_, double const& tauV_,
             Mesh* const mesh_,
             ForcesType* forces_, VerticesType* const vertices_) :
             VertexForce<ForcesType>("centre",
-                {{"Lambda", Lambda_}, {"V0", V0_}, {"tauV", tauV_}},
+                {{"gamma", gamma_}, {"Lambda", Lambda_}, {"V0", V0_}, {"tauV", tauV_}},
                 forces_, vertices_),
             mesh(mesh_) {
             // initialise volumes
@@ -196,8 +196,8 @@ Cell surface minimising force at constant volume.
                     false));
                 for (int dim=0; dim < 2; dim++) {
                     (*forces)[neighbourVerticesIndices[i]][dim] +=
-                        (parameters.at("Lambda")/2)*(
-                            2 - V0*perimeter/(area*area))*(
+                        (parameters.at("gamma")/2)*(
+                            2 - parameters.at("Lambda")*V0*perimeter/(area*area))*(
                                 crossToPreviousNeighbour[dim]
                                     - crossToNextNeighbour[dim]);
                 }
@@ -212,7 +212,7 @@ Cell surface minimising force at constant volume.
                     true);
                 for (int dim=0; dim < 2; dim++) {
                     (*forces)[neighbourVerticesIndices[i]][dim] +=
-                        parameters.at("Lambda")*(V0/area)*(
+                        parameters.at("gamma")*parameters.at("Lambda")*(V0/area)*(
                             toPreviousNeighbour[dim] + toNextNeighbour[dim]);
                 }
             }
@@ -239,16 +239,16 @@ Cell surface minimising force at constant volume.
                 }
             }
 
-            if (parameters.at("tauV") == 0) return;
+            // if (parameters.at("tauV") == 0) return;
 
             // integrate volume
-            for (auto it=volume.begin(); it != volume.end(); ++it) {
-//                 // exponential relaxation
-//                 it->second += (parameters.at("V0") - it->second)
-//                     *dt/parameters.at("tauV");
-                // linear variation
-                it->second += (parameters.at("V0")/parameters.at("tauV"))*dt;
-            }
+            // for (auto it=volume.begin(); it != volume.end(); ++it) {
+            //  // exponential relaxation
+            //  it->second += (parameters.at("V0") - it->second)
+            //         *dt/parameters.at("tauV");
+            //     // linear variation
+            //     it->second += (parameters.at("V0")/parameters.at("tauV"))*dt;
+            // }
         }
 
         pybind11::tuple pybind11_getstate() const override;
