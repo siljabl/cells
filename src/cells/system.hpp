@@ -216,9 +216,33 @@ class VertexModel : public Mesh {
 
         long int splitCellAtMax(
             long int const& cellVertexIndex,
-            bool const& avoidThreeEdgeCells=false);
+            bool const& avoidThreeEdgeCells=false,
+            bool const& avoidThinCells=false,
+            double const& edgeLim=0);
         /*
         Split cell across the two most separated boundary half-edge centres.
+
+        Parameters
+        ----------
+        cellVertexIndex :
+            Vertex index of centre of cell to split.
+        avoidThreeEdgeCells :
+            Ignore divisions which would result in cells with three edges.
+        avoidShortEdges :
+            Ignore divisions which would result in very thin and long cells.
+
+        Returns
+        -------
+        newCellVertexIndex :
+            Index of newly created cell centre.
+        */
+        long int splitCellAtMiddle(
+            long int const& cellVertexIndex,
+            bool const& avoidThreeEdgeCells=false,
+            bool const& avoidThinCells=false,
+            double const& edgeLim=0);
+        /*
+        Split cell across the two least separated boundary half-edge centres.
 
         Parameters
         ----------

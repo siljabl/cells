@@ -947,7 +947,30 @@ PYBIND11_MODULE(bind, m) {
             "newCellVertexIndex : int\n"
             "    Index of newly created cell centre.",
             pybind11::arg("cellVertexIndex"),
-            pybind11::arg("avoidThreeEdgeCells")=false)
+            pybind11::arg("avoidThreeEdgeCells")=false,
+            pybind11::arg("avoidThinCells")=false,
+            pybind11::arg("edgeLim")=0)
+        .def("splitCellAtMiddle",
+            &VertexModel::splitCellAtMiddle,
+            "Split cell across the two least separated boundary half-edge\n"
+            "centres.\n"
+            "\n"
+            "Parameters\n"
+            "----------\n"
+            "cellVertexIndex : int\n"
+            "    Vertex index of centre of cell to split.\n"
+            "avoidThreeEdgeCells : bool\n"
+            "    Ignore divisions which would result in cells with three\n"
+            "    edges. (default: False)\n"
+            "\n"
+            "Returns\n"
+            "-------\n"
+            "newCellVertexIndex : int\n"
+            "    Index of newly created cell centre.",
+            pybind11::arg("cellVertexIndex"),
+            pybind11::arg("avoidThreeEdgeCells")=false,
+            pybind11::arg("avoidThinCells")=false,
+            pybind11::arg("edgeLim")=0)
         .def("mergeCell",
             &VertexModel::mergeCell,
             "Merge two cells whose centres are separated by the half-edge\n"

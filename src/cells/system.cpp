@@ -322,12 +322,16 @@ long int VertexModel::splitCell(
 
 long int VertexModel::splitCellAtMax(
     long int const& cellVertexIndex,
-    bool const& avoidThreeEdgeCells) {
-
+    bool const& avoidThreeEdgeCells,
+    bool const& avoidThinCells,
+    double const& edgeLim) {
     double maxDist = 0;
     std::vector<long int> const centreToBoundaryHalfEdges =     // half-edges from cell centre to cell corners
         getNeighbourVertices(cellVertexIndex)[1];
+
     int const nEdges = centreToBoundaryHalfEdges.size();        // number of cell edges
+    double const meanJunctionLength = getVertexToNeighboursPerimeter(cellVertexIndex) / nEdges;
+    
     std::vector<long int> maxHalfEdgeIndices;                   // pair of half-edges which maximises distance between their centres
 
     for (int i=0; i < nEdges; i++) {
@@ -342,6 +346,12 @@ long int VertexModel::splitCellAtMax(
                 && (j == i + 1 || (i == 0 && j == nEdges - 1))) // ignore successive edges
                 continue;
 
+            if (avoidThinCells
+            // && (j == i + 2 || (i == 0 && j == nEdges - 2))
+            && getEdgeLength(boundaryHalfEdgeIndex0) < edgeLim * meanJunctionLength  
+            && getEdgeLength(boundaryHalfEdgeIndex1) < edgeLim * meanJunctionLength)
+                continue;
+
             double const dist = norm2(wrapDiff(                 // distance between the centres of first and second given boundary half-edges
                 getHalfEdgeCentre(boundaryHalfEdgeIndex0),
                 getHalfEdgeCentre(boundaryHalfEdgeIndex1)));
@@ -353,10 +363,59 @@ long int VertexModel::splitCellAtMax(
             }
         }
     }
-
     assert((int) maxHalfEdgeIndices.size() == 2);
     return splitCell(maxHalfEdgeIndices.at(0), maxHalfEdgeIndices.at(1));
 }
+
+long int VertexModel::splitCellAtMiddle(
+    long int const& cellVertexIndex,
+    bool const& avoidThreeEdgeCells,
+    bool const& avoidThinCells,
+    double const& edgeLim) {
+    double maxDist = 0;
+    std::vector<long int> const centreToBoundaryHalfEdges =     // half-edges from cell centre to cell corners
+        getNeighbourVertices(cellVertexIndex)[1];
+
+    int const nEdges = centreToBoundaryHalfEdges.size();        // number of cell edges
+    int const edgeDist = (nEdges + (nEdges % 2)) / 2;
+
+    double const meanJunctionLength = getVertexToNeighboursPerimeter(cellVertexIndex) / nEdges;
+    
+    std::vector<long int> maxHalfEdgeIndices;                   // pair of half-edges which maximises distance between their centres
+
+    for (int i=0; i < nEdges; i++) {
+        int j = (i + edgeDist) % nEdges;
+
+        if (avoidThreeEdgeCells
+            && (j == i + 1 || (i == 0 && j == nEdges - 1)))    // ignore successive edges
+            continue;
+            
+        long int const boundaryHalfEdgeIndex0 =                // first given boundary half-edge
+            halfEdges.at(centreToBoundaryHalfEdges.at(i)).getNextIndex();
+
+        long int const boundaryHalfEdgeIndex1 =                // second given boundary half-edge
+                halfEdges.at(centreToBoundaryHalfEdges.at(j)).getNextIndex();
+
+
+        if (avoidThinCells
+            && getEdgeLength(boundaryHalfEdgeIndex0) < edgeLim * meanJunctionLength  
+            && getEdgeLength(boundaryHalfEdgeIndex1) < edgeLim * meanJunctionLength)
+            continue;
+
+        double const dist = norm2(wrapDiff(                 // distance between the centres of first and second given boundary half-edges
+            getHalfEdgeCentre(boundaryHalfEdgeIndex0),
+            getHalfEdgeCentre(boundaryHalfEdgeIndex1)));
+        if (dist > maxDist) {
+            maxDist = dist;
+            maxHalfEdgeIndices.clear();
+            maxHalfEdgeIndices.push_back(boundaryHalfEdgeIndex0);
+            maxHalfEdgeIndices.push_back(boundaryHalfEdgeIndex1);
+        }
+    }
+    assert((int) maxHalfEdgeIndices.size() == 2);
+    return splitCell(maxHalfEdgeIndices.at(0), maxHalfEdgeIndices.at(1));
+}
+
 
 std::tuple<long int, std::vector<long int>> VertexModel::mergeCell(
     long int const& halfEdgeIndex) {
