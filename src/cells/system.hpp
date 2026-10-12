@@ -272,6 +272,25 @@ class VertexModel : public Mesh {
         neighbouringCellIndices :
             Indices of neighbouring cell centres whose edges have been removed.
         */
+        
+        std::tuple<long int, std::vector<long int>> mergeCellAtMax(
+            long int const& cellVertexIndex);
+        /*
+        Merge cell with its neighbouring cell of maximum area.
+
+        Parameters
+        ----------
+        cellVertexIndex :
+            Index of centre of cell to merge with its neighbour.
+
+        Returns
+        -------
+        toCellVertexIndex :
+            Index of cell centre to which the origin cell centre was merged.
+        neighbouringCellIndices :
+            Indices of neighbouring cell centres whose edges have been removed.
+        */
+
 
         void checkMesh(
             std::vector<std::string> const&

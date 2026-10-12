@@ -464,6 +464,52 @@ std::tuple<long int, std::vector<long int>> VertexModel::mergeCellAtMin(
         getHalfEdgeBetweenIndex(cellVertexIndex, minAreaNeighCellVertexIndex));
 }
 
+std::tuple<long int, std::vector<long int>> VertexModel::mergeCellAtMax(
+    long int const& cellVertexIndex) {
+
+    // find cell neighbour with the longest junction
+    std::vector<long int> const centreToJunctionHalfEdgeIndices = getNeighbourVertices(cellVertexIndex)[1];
+    assert((int) centreToJunctionHalfEdgeIndices.size() > 0);
+    long int maxJunctionNeighCellVertexIndex =
+        halfEdges.at(
+            halfEdges.at(
+                halfEdges.at(
+                    halfEdges.at(centreToJunctionHalfEdgeIndices.at(0))
+                        .getNextIndex())
+                    .getPairIndex())
+                .getNextIndex())
+            .getToIndex();
+
+    assert(vertices.at(maxJunctionNeighCellVertexIndex).getType() == "centre");
+
+    double maxJunction = getEdgeLength(halfEdges.at(
+                                            centreToJunctionHalfEdgeIndices.at(0))
+                                            .getNextIndex());
+    for (long int centreToJunctionHalfEdgeIndex : centreToJunctionHalfEdgeIndices) {
+        double const junction = getEdgeLength(halfEdges.at(centreToJunctionHalfEdgeIndex).getNextIndex());
+        if (junction > maxJunction) {
+            maxJunctionNeighCellVertexIndex = 
+                    halfEdges.at(        
+                        halfEdges.at(
+                            halfEdges.at(
+                                halfEdges.at(
+                                    centreToJunctionHalfEdgeIndex)
+                                    .getNextIndex())
+                                .getPairIndex())
+                            .getNextIndex())
+                        .getToIndex();
+                        
+        assert(vertices.at(maxJunctionNeighCellVertexIndex).getType() == "centre");
+
+            maxJunction = junction;
+        }
+    }
+
+    // merge cells
+    return mergeCell(
+        getHalfEdgeBetweenIndex(cellVertexIndex, maxJunctionNeighCellVertexIndex));
+}
+
 void VertexModel::checkMesh(
     std::vector<std::string> const& halfEdgeTypes,
     bool const& checkOrientations) const {

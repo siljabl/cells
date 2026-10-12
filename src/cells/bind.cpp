@@ -988,6 +988,24 @@ PYBIND11_MODULE(bind, m) {
             "    Indices of neighbouring cell centres whose edges have been\n"
             "     removed.",
             pybind11::arg("mergeCellAtMin"))
+        .def("mergeCellAtMax",
+            &VertexModel::mergeCellAtMax,
+            "Merge cell with its neighbouring cell of maximum area.\n"
+            "\n"
+            "Parameters\n"
+            "----------\n"
+            "cellVertexIndex : int\n"
+            "    Index of centre of cell to merge with its neighbour.\n"
+            "\n"
+            "Returns\n"
+            "-------\n"
+            "toCellVertexIndex : int\n"
+            "    Index of cell centre to which the origin cell centre was\n"
+            "    merged."
+            "neighbouringCellIndices : list of int\n"
+            "    Indices of neighbouring cell centres whose edges have been\n"
+            "     removed.",
+            pybind11::arg("mergeCellAtMax"))
         .def("checkMesh",
             &VertexModel::checkMesh,
             "Check that the vertices and half-edges define a planar mesh.\n"
