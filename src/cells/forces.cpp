@@ -44,7 +44,7 @@ template<> void VertexModel::addVertexForce<
     // set force
     vertexForces.add<SurfaceForce>(
         name,                       // (unique) user-defined name for forces
-        gamma, Lambda, V0, tauV,           // user-defined parameters
+        gamma, Lambda, V0, tauV,    // user-defined parameters
         this, &forces, &vertices);  // VertexModel attributes
 }
 

@@ -228,8 +228,12 @@ class VertexModel : public Mesh {
             Vertex index of centre of cell to split.
         avoidThreeEdgeCells :
             Ignore divisions which would result in cells with three edges.
-        avoidShortEdges :
-            Ignore divisions which would result in very thin and long cells.
+        avoidThinCells :
+            Ignore divisions which would result in cells with junctions
+            shorter than a fraction of the mean junction length.
+        edgeLim : 
+            Upper limit on the allowed fraction of the mean junction
+            length.
 
         Returns
         -------
@@ -242,7 +246,7 @@ class VertexModel : public Mesh {
             bool const& avoidThinCells=false,
             double const& edgeLim=0);
         /*
-        Split cell across the two least separated boundary half-edge centres.
+        Split cell across the two opposite boundary half-edge centres.
 
         Parameters
         ----------
@@ -250,6 +254,12 @@ class VertexModel : public Mesh {
             Vertex index of centre of cell to split.
         avoidThreeEdgeCells :
             Ignore divisions which would result in cells with three edges.
+        avoidThinCells :
+            Ignore divisions which would result in cells with junctions
+            shorter than a fraction of the mean junction length.
+        edgeLim : 
+            Upper limit on the allowed fraction of the mean junction
+            length.
 
         Returns
         -------
