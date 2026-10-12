@@ -3,7 +3,9 @@ SHELL:=/bin/bash
 # COMPILATION PARAMETERS
 
 # -- python executable --
-PYTHON=python
+#PYTHON=python
+PYTHON=/home/silja/Documents/VertexModel/venv/bin/python
+
 # -- compiler --
 # default C++ compiler (g++, clang++, etc.) should already be available in Makefile as $(CXX)
 # CXX=g++
@@ -11,6 +13,8 @@ PYTHON=python
 # -- compiler flags --
 # -g flag should not affect performance (https://stackoverflow.com/questions/10988318/g-is-using-the-g-flag-for-production-builds-a-good-idea)
 CFLAGS=-std=c++20 -O3 -Wall -g
+CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
+
 # -- linker flags --
 # linker flags may be OS-dependent (https://stackoverflow.com/questions/714100/os-detecting-makefile)
 # macOS needs specific linker flag (https://pybind11.readthedocs.io/en/stable/compiling.html#building-manually)
@@ -20,12 +24,12 @@ MPFLAGS=-fopenmp
 # -- python flags --
 # find actual python executable by resolving symlinks
 # (https://stackoverflow.com/questions/7665/how-to-resolve-symbolic-links-in-a-shell-script/42918#42918)
-PYTHON:=$(shell perl -MCwd -le 'print Cwd::abs_path(shift)' "`which $(PYTHON)`")
+#PYTHON:=$(shell perl -MCwd -le 'print Cwd::abs_path(shift)' "`which $(PYTHON)`")
 PYTHONFLAGS=
 # python libraries
 # https://stackoverflow.com/a/59074274
 PYTHONFLAGS+=$(shell $(PYTHON)-config --includes 2> /dev/null)
-PYTHONFLAGS+=$(shell $(PYTHON) -m pybind11 --includes 2> /dev/null)
+PYTHONFLAGS+=$(shell $(PYTHON) -m pybind11 --includes #2> /dev/null)
 # -- external libraries flags --
 EXTERNFLAGS=
 # use pkg-config to find libraries
