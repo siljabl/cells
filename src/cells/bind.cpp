@@ -858,6 +858,29 @@ PYBIND11_MODULE(bind, m) {
             "neighbourCellIndices : list of int\n"
             "    Indices of neighbouring cells.",
             pybind11::arg("vertexIndex"))
+            // methods
+        .def("integrate",
+            [](VertexModel& self,
+                double const& dt, double const& delta, 
+                double const& epsilon) {
+                self.integrate(dt, delta, epsilon);
+            },
+            "Compute forces and integrate dynamics. T1s are performed at\n"
+            "each time step.\n"
+            "\n"
+            "Parameters\n"
+            "----------\n"
+            "dt : float\n"
+            "    Integration time step. (default: 0)\n"
+            "delta : float\n"
+            "    Distance between vertices below which these should be\n"
+            "    merged. (default: 0.1)\n"
+            "epsilon : float\n"
+            "    Create two vertices at distance `delta' + `epsilon' after\n"
+            "    T1. (default: 0.1)",
+            pybind11::arg("dt")=0,
+            pybind11::arg("delta")=0.1,
+            pybind11::arg("epsilon")=0.1)
         .def("nintegrate",
             [](VertexModel& self,
                 long int const& niter, double const& dt,
