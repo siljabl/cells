@@ -346,8 +346,7 @@ long int VertexModel::splitCellAtMax(
                 && (j == i + 1 || (i == 0 && j == nEdges - 1))) // ignore successive edges
                 continue;
 
-            if (avoidThinCells
-            // && (j == i + 2 || (i == 0 && j == nEdges - 2))
+            if (avoidThinCells                                  // ignore short junctions
             && getEdgeLength(boundaryHalfEdgeIndex0) < edgeLim * meanJunctionLength  
             && getEdgeLength(boundaryHalfEdgeIndex1) < edgeLim * meanJunctionLength)
                 continue;
@@ -396,8 +395,7 @@ long int VertexModel::splitCellAtMiddle(
         long int const boundaryHalfEdgeIndex1 =                // second given boundary half-edge
                 halfEdges.at(centreToBoundaryHalfEdges.at(j)).getNextIndex();
 
-
-        if (avoidThinCells
+        if (avoidThinCells                                      // ignore short junctions
             && getEdgeLength(boundaryHalfEdgeIndex0) < edgeLim * meanJunctionLength  
             && getEdgeLength(boundaryHalfEdgeIndex1) < edgeLim * meanJunctionLength)
             continue;
