@@ -277,7 +277,7 @@ void VertexModel::doT1(double const& delta, double const& epsilon) {
 //     checkMesh({"junction"});
 }
 
-long int VertexModel::splitCell(
+std::tuple<long int, long int> VertexModel::splitCell(
     long int const& halfEdgeIndex0, long int const& halfEdgeIndex1) {
 
     long int const cellVertexIndex =    // index of cell centre vertex
@@ -303,24 +303,27 @@ long int VertexModel::splitCell(
 
     // create new cell centre
 
-    long int const newCellVertexIndex = std::get<0>(
+    long int const newCellVertexIndex0 = std::get<0>(
         createEdge(                         // split the half-edges from the initial centre to the newly created vertices in order to create the new cell centre
             halfEdgeToSplitIndices.at(0), halfEdgeToSplitIndices.at(1),
             0, 0, "", ""));
     long int const halfEdgeToSwapIndex =    // half-edge from initial cell centre to the created cell centre
-        getHalfEdgeIndex(cellVertexIndex, newCellVertexIndex);
+        getHalfEdgeIndex(cellVertexIndex, newCellVertexIndex0);
 
     // flip edge to create cell junction
 
     swapEdge(halfEdgeToSwapIndex, "junction");      // swap edge and create junction
     moveToNeighboursCentroid(cellVertexIndex);      // move initial cell vertex to its barycentre
-    moveToNeighboursCentroid(newCellVertexIndex);   // move new cell vertex to its barycentre
+    moveToNeighboursCentroid(newCellVertexIndex0);  // move new cell vertex to its barycentre
 
+    long int const newCellVertexIndex1 =            // replace cell centre index of mother cell 
+
+        replaceVertex(cellVertexIndex);
 //     checkMesh({"junction"});
-    return newCellVertexIndex;
+    return std::make_tuple(newCellVertexIndex0, newCellVertexIndex1);
 }
 
-long int VertexModel::splitCellAtMax(
+std::tuple<long int, long int> VertexModel::splitCellAtMax(
     long int const& cellVertexIndex,
     bool const& avoidThreeEdgeCells,
     bool const& avoidThinCells,
@@ -366,7 +369,7 @@ long int VertexModel::splitCellAtMax(
     return splitCell(maxHalfEdgeIndices.at(0), maxHalfEdgeIndices.at(1));
 }
 
-long int VertexModel::splitCellAtMiddle(
+std::tuple<long int, long int> VertexModel::splitCellAtMiddle(
     long int const& cellVertexIndex,
     bool const& avoidThreeEdgeCells,
     bool const& avoidThinCells,

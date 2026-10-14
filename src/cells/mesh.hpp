@@ -480,6 +480,22 @@ Two-dimensional ensembles of vertices and edges.
             Index of vertex.
         */
 
+        long int replaceVertex(
+            long int const& vertexIndex);
+        /*
+        Replace vertex by equivalent vertex with a new index.
+
+        Parameters
+        ----------
+        vertexIndex :
+            Index of vertex to be replaced.
+
+        Returns
+        -------
+        newVertexIndex :
+            Index of replacement vertex.
+        */
+
         TopoChangeEdgeInfoType deleteEdge(
             long int const& halfEdgeIndex);
         /*

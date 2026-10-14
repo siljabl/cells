@@ -192,7 +192,7 @@ class VertexModel : public Mesh {
             Create two vertices at distance `delta' + `epsilon'.
         */
 
-        long int splitCell(
+        std::tuple<long int, long int> splitCell(
             long int const& halfEdgeIndex0, long int const& halfEdgeIndex1);
         /*
         Split one cell into two by adding vertices in the middle of edges with
@@ -210,11 +210,13 @@ class VertexModel : public Mesh {
 
         Returns
         -------
-        newCellVertexIndex :
+        newCellVertexIndex0 :
             Index of newly created cell centre.
+        newCellVertexIndex1 :
+            Index of replacement cell centre.
         */
 
-        long int splitCellAtMax(
+        std::tuple<long int, long int> splitCellAtMax(
             long int const& cellVertexIndex,
             bool const& avoidThreeEdgeCells=false,
             bool const& avoidThinCells=false,
@@ -237,10 +239,12 @@ class VertexModel : public Mesh {
 
         Returns
         -------
-        newCellVertexIndex :
+        newCellVertexIndex0 :
             Index of newly created cell centre.
+        newCellVertexIndex1 :
+            Index of replacement cell centre.
         */
-        long int splitCellAtMiddle(
+        std::tuple<long int, long int> splitCellAtMiddle(
             long int const& cellVertexIndex,
             bool const& avoidThreeEdgeCells=false,
             bool const& avoidThinCells=false,
@@ -263,8 +267,10 @@ class VertexModel : public Mesh {
 
         Returns
         -------
-        newCellVertexIndex :
+        newCellVertexIndex0 :
             Index of newly created cell centre.
+        newCellVertexIndex1 :
+            Index of replacement cell centre.
         */
 
         std::tuple<long int, std::vector<long int>> mergeCell(

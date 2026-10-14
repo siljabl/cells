@@ -924,8 +924,10 @@ PYBIND11_MODULE(bind, m) {
             "\n"
             "Returns\n"
             "-------\n"
-            "newCellVertexIndex : int\n"
-            "    Index of newly created cell centre.",
+            "newCellVertexIndex0 : int\n"
+            "    Index of newly created cell centre."
+            "newCellVertexIndex1 : int\n"
+            "    Index of replacement cell centre.",
             pybind11::arg("halfEdgeIndex0"),
             pybind11::arg("halfEdgeIndex1"))
         .def("splitCellAtMax",
@@ -950,8 +952,10 @@ PYBIND11_MODULE(bind, m) {
             "\n"
             "Returns\n"
             "-------\n"
-            "newCellVertexIndex : int\n"
-            "    Index of newly created cell centre.",
+            "newCellVertexIndex0 : int\n"
+            "    Index of newly created cell centre."
+            "newCellVertexIndex1 : int\n"
+            "    Index of replacement cell centre.",
             pybind11::arg("cellVertexIndex"),
             pybind11::arg("avoidThreeEdgeCells")=false,
             pybind11::arg("avoidThinCells")=false,
@@ -978,8 +982,10 @@ PYBIND11_MODULE(bind, m) {
             "\n"
             "Returns\n"
             "-------\n"
-            "newCellVertexIndex : int\n"
-            "    Index of newly created cell centre.",
+            "newCellVertexIndex0 : int\n"
+            "    Index of newly created cell centre."
+            "newCellVertexIndex1 : int\n"
+            "    Index of replacement cell centre.",
             pybind11::arg("cellVertexIndex"),
             pybind11::arg("avoidThreeEdgeCells")=false,
             pybind11::arg("avoidThinCells")=false,

@@ -276,6 +276,53 @@ void Mesh::moveToNeighboursCentroid(
         wrap(vertices.at(vertexIndex).getUPosition()));
 }
 
+long int Mesh::replaceVertex(long int const& vertexIndex) {
+
+    assert(vertices.count(vertexIndex) == 1);
+
+    // create new vertex
+
+    long int const newVertexIndex = maxKey(vertices) + 1;
+    std::vector<double> const position =
+        vertices.at(vertexIndex).getPosition();
+    std::vector<double> const uposition =
+        vertices.at(vertexIndex).getUPosition();
+    long int const vertexHalfEdgeIndex =
+        vertices.at(vertexIndex).getHalfEdgeIndex();
+    vertices.emplace(newVertexIndex, Vertex(
+        // vertices is std::map so add with std::map::emplace
+        newVertexIndex,                         // vertexIndex
+        position,                               // position
+        uposition,                              // unwrapped position
+        vertexHalfEdgeIndex,                    // halfEdgeIndex
+        false,                                  // boundary
+        vertices.at(vertexIndex).getType()));   // type (inherit from parent vertex)
+
+    // relabel origins and destinations of all half-edges
+    
+    long int halfEdgeIndex = vertexHalfEdgeIndex;
+    long int previousHalfEdgeIndex;
+    while (vertexIndex == halfEdges.at(halfEdgeIndex).getFromIndex()) {
+
+        assert(
+            vertexIndex == halfEdges.at(halfEdgeIndex).getFromIndex());
+        halfEdges[halfEdgeIndex].setFromIndex(newVertexIndex);
+
+        previousHalfEdgeIndex = halfEdges.at(halfEdgeIndex).getPreviousIndex();
+        assert(
+            vertexIndex == halfEdges.at(previousHalfEdgeIndex).getToIndex());
+        halfEdges[previousHalfEdgeIndex].setToIndex(newVertexIndex);
+
+        halfEdgeIndex = halfEdges.at(previousHalfEdgeIndex).getPairIndex();
+    }
+    
+    // Remove the old mother-centre index from the map.
+    vertices.erase(vertexIndex);
+
+    return newVertexIndex;
+}
+
+
 TopoChangeEdgeInfoType Mesh::deleteEdge(
     long int const& halfEdgeIndex) {
 
